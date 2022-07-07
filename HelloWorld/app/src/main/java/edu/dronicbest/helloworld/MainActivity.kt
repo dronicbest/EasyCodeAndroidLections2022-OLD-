@@ -1,9 +1,12 @@
 package edu.dronicbest.helloworld
 
+import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -45,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             if (Patterns.EMAIL_ADDRESS.matcher(textInputEditText.text.toString()).matches()) {
                 Snackbar.make(loginButton, "Go to postLogin", Snackbar.LENGTH_LONG)
+                loginButton.isEnabled = false
+                hideKeyboard(textInputEditText)
             } else {
                 textInputLayout.isErrorEnabled = true
                 textInputLayout.error = getString(R.string.invalid_email_address_msg)
@@ -63,5 +68,10 @@ class MainActivity : AppCompatActivity() {
     fun TextInputEditText.setTextCorrectly(text: CharSequence) {
         setText(text)
         setSelection(text.length)
+    }
+
+    fun AppCompatActivity.hideKeyboard(view: View) {
+        val imm = this.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
