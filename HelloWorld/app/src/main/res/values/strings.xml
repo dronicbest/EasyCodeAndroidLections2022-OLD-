@@ -6,4 +6,7 @@
     <string name="confidential_info">agreement</string>
     <string name="privacy_policy">privacy policy</string>
     <string name="ic_content_description">Picture in screen</string>
+    <string name="login">Login</string>
+    <string name="invalid_email_address_msg">Invalid email address</string>
+    <string name="valid_email_address_msg">Valid email address</string>
 </resources>

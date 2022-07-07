@@ -1,42 +1,39 @@
 package edu.dronicbest.helloworld
 
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.view.View
+import android.text.Editable
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.ColorRes
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
 
-    private companion object {
-//        const val URL = "https://zavistnik.com/wp-content/uploads/2020/03/Android-kursy-zastavka.jpg"
-        const val URL = "https://images4.alphacoders.com/109/1095230.jpg"
-    }
+    private lateinit var textInputLayout: TextInputLayout
+    private lateinit var textInputEditText: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val image: ImageView = findViewById(R.id.iconImageView)
-        image.setOnClickListener {
-            image.setImageResource(R.mipmap.android_image)
-        }
+        textInputLayout = findViewById(R.id.textInputLayout)
+        textInputEditText = findViewById(R.id.textInputEditText)
 
-        image.loadFromURL(URL)
-
+        textInputEditText.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                val validEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()
+                textInputLayout.isErrorEnabled = !validEmail
+                val error = if (validEmail) "" else getString(R.string.invalid_email_address_msg)
+                textInputLayout.error = error
+                if (validEmail) Toast.makeText(
+                    this@MainActivity,
+                    R.string.valid_email_address_msg,
+                    Toast.LENGTH_LONG
+                )
+            }
+        })
     }
 
     fun ImageView.loadFromURL(url: String) {
