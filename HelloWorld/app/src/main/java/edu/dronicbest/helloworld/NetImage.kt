@@ -1,6 +1,8 @@
 package edu.dronicbest.helloworld
 
 import android.graphics.BitmapFactory
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import java.lang.Exception
 import java.net.URL
 
@@ -21,5 +23,13 @@ class NetImage(
         } catch(e: Exception) {
             callback.failed()
         }
+    }
+
+    fun ImageView.loadFromURL(url: String) {
+        Glide.with(this).load(url)
+//            .fitCenter()
+            .placeholder(android.R.drawable.ic_media_pause)
+            .error(android.R.drawable.ic_dialog_alert)
+            .into(this);
     }
 }

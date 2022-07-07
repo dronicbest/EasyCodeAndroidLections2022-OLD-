@@ -2,6 +2,7 @@ package edu.dronicbest.helloworld
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,36 +12,35 @@ import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var textInputLayout: TextInputLayout
     private lateinit var textInputEditText: TextInputEditText
+
+    private val textWatcher: TextWatcher = object : SimpleTextWatcher() {
+        override fun afterTextChanged(s: Editable?) {
+            val input = s.toString()
+            if (input.endsWith("@g")) {
+                setText("${input}mail.com")
+            }
+        }
+    }
+
+    private fun setText(text: String) {
+        textInputEditText.removeTextChangedListener(textWatcher)
+        textInputEditText.setTextCorrectly(text)
+        textInputEditText.addTextChangedListener(textWatcher)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        textInputLayout = findViewById(R.id.textInputLayout)
-        textInputEditText = findViewById(R.id.textInputEditText)
+        val textInputLayout = findViewById<TextInputLayout>(R.id.textInputLayout)
+        textInputEditText = textInputLayout.editText as TextInputEditText
 
-        textInputEditText.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun afterTextChanged(s: Editable?) {
-                val validEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()
-                textInputLayout.isErrorEnabled = !validEmail
-                val error = if (validEmail) "" else getString(R.string.invalid_email_address_msg)
-                textInputLayout.error = error
-                if (validEmail) Toast.makeText(
-                    this@MainActivity,
-                    R.string.valid_email_address_msg,
-                    Toast.LENGTH_LONG
-                )
-            }
-        })
+        textInputEditText.addTextChangedListener(textWatcher)
     }
 
-    fun ImageView.loadFromURL(url: String) {
-        Glide.with(this).load(url)
-//            .fitCenter()
-            .placeholder(android.R.drawable.ic_media_pause)
-            .error(android.R.drawable.ic_dialog_alert)
-            .into(this);
+    fun TextInputEditText.setTextCorrectly(text: CharSequence) {
+        setText(text)
+        setSelection(text.length)
     }
 }
