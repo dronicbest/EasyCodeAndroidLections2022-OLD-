@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 
@@ -34,22 +35,15 @@ class MainActivity : AppCompatActivity() {
             image.setImageResource(R.mipmap.android_image)
         }
 
-        Picasso.get().load(URL).centerCrop()
-            .resize(720, 1280)
+        image.loadFromURL(URL)
+
+    }
+
+    fun ImageView.loadFromURL(url: String) {
+        Glide.with(this).load(url)
+//            .fitCenter()
             .placeholder(android.R.drawable.ic_media_pause)
             .error(android.R.drawable.ic_dialog_alert)
-            .into(image)
-//
-//        val netImage = NetImage(URL, object : ImageCallback {
-//            override fun success(bitmap: Bitmap) = runOnUiThread {
-//                image.setImageBitmap(bitmap)
-//            }
-//
-//            override fun failed() = runOnUiThread {
-//                Snackbar.make(image, "filed", Snackbar.LENGTH_SHORT).show()
-//            }
-//
-//        })
-//        netImage.start()
+            .into(this);
     }
 }
