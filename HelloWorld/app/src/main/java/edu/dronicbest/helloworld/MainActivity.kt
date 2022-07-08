@@ -1,15 +1,17 @@
 package edu.dronicbest.helloworld
 
+import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val checkBox = findViewById<CheckBox>(R.id.checkBox)
+
         val textInputLayout = findViewById<TextInputLayout>(R.id.textInputLayout)
         textInputEditText = textInputLayout.editText as TextInputEditText
         textInputEditText.addTextChangedListener(textWatcher)
@@ -54,6 +58,10 @@ class MainActivity : AppCompatActivity() {
                 textInputLayout.isErrorEnabled = true
                 textInputLayout.error = getString(R.string.invalid_email_address_msg)
             }
+        }
+
+        checkBox.setOnCheckedChangeListener {_, isChecked ->
+            loginButton.isEnabled = isChecked
         }
     }
 

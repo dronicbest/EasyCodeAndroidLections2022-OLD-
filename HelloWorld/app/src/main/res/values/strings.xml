@@ -2,7 +2,7 @@
     <string name="app_name">HelloWorld</string>
     <string name="hello_world">Hello World! This is first project easy code of main lectures. All 24 lectures</string>
     <string name="html" translatable="false"><![CDATA[<HTML><TITLE>Title</TITLE></HTML>]]></string>
-    <string name="agreement_full_text">By pressing next button you confirm the agreement and privacy policy</string>
+    <string name="agreement_full_text">I agree with terms of use and privacy policy</string>
     <string name="confidential_info">agreement</string>
     <string name="privacy_policy">privacy policy</string>
     <string name="ic_content_description">Picture in screen</string>
