@@ -1,19 +1,17 @@
 package edu.dronicbest.helloworld
 
-import android.graphics.Color
-import android.inputmethodservice.InputMethodService
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
-import android.text.SpannableString
-import android.text.Spanned
 import android.text.TextWatcher
-import android.text.method.LinkMovementMethod
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -41,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val contentLayout = findViewById<LinearLayout>(R.id.contentLayout)
+
+        val processBar = findViewById<ProgressBar>(R.id.progressBar)
+
         val checkBox = findViewById<CheckBox>(R.id.checkBox)
 
         val textInputLayout = findViewById<TextInputLayout>(R.id.textInputLayout)
@@ -53,7 +55,21 @@ class MainActivity : AppCompatActivity() {
             if (Patterns.EMAIL_ADDRESS.matcher(textInputEditText.text.toString()).matches()) {
                 Snackbar.make(loginButton, "Go to postLogin", Snackbar.LENGTH_LONG)
                 loginButton.isEnabled = false
+                processBar.visibility = View.VISIBLE
+                contentLayout.visibility = View.GONE
                 hideKeyboard(textInputEditText)
+                Handler(Looper.myLooper()!!).postDelayed({
+                    contentLayout.visibility = View.VISIBLE
+                    processBar.visibility = View.GONE
+                    val dialog = BottomSheetDialog(this)
+                    val view = LayoutInflater.from(this).inflate(R.layout.dialog, contentLayout, false)
+                    dialog.setCancelable(false)
+                    view.findViewById<View>(R.id.closeButton).setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.setContentView(view)
+                    dialog.show()
+                }, 3000)
             } else {
                 textInputLayout.isErrorEnabled = true
                 textInputLayout.error = getString(R.string.invalid_email_address_msg)
