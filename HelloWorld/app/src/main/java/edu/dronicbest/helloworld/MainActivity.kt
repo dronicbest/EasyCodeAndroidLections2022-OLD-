@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -16,39 +17,55 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
+const val TAG = "MyLog"
+
 class MainActivity : AppCompatActivity() {
 
+    private companion object {
+        const val INITIAL = 0
+        const val PROGRESS = 1
+        const val SUCCESS = 2
+        const val FILED = 3
+    }
+
+    private var state = INITIAL
+
     private lateinit var textInputEditText: TextInputEditText
+    private lateinit var textInputLayout: TextInputLayout
 
     private val textWatcher: TextWatcher = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable?) {
-            val input = s.toString()
-            if (input.endsWith("@g")) {
-                setText("${input}mail.com")
-            }
+            Log.d(TAG, "changed ${s.toString()}")
+            textInputLayout.isErrorEnabled = false
         }
     }
 
-    private fun setText(text: String) {
+    override fun onPause() {
+        super.onPause()
         textInputEditText.removeTextChangedListener(textWatcher)
-        textInputEditText.setTextCorrectly(text)
+    }
+
+    override fun onResume() {
+        super.onResume()
         textInputEditText.addTextChangedListener(textWatcher)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d(TAG, "onCreate ${savedInstanceState == null}")
 
         val contentLayout = findViewById<LinearLayout>(R.id.contentLayout)
-
         val processBar = findViewById<ProgressBar>(R.id.progressBar)
-
         val checkBox = findViewById<CheckBox>(R.id.checkBox)
 
-        val textInputLayout = findViewById<TextInputLayout>(R.id.textInputLayout)
+        textInputLayout = findViewById(R.id.textInputLayout)
         textInputEditText = textInputLayout.editText as TextInputEditText
         textInputEditText.addTextChangedListener(textWatcher)
-        textInputEditText.listenerChanges { textInputLayout.isErrorEnabled = false }
+        textInputEditText.listenerChanges {
+            textInputLayout.isErrorEnabled = false
+            Log.d(TAG, "changed $it")
+        }
 
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
