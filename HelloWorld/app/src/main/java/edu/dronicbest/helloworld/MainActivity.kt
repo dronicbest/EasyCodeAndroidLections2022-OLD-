@@ -1,5 +1,6 @@
 package edu.dronicbest.helloworld
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,17 +8,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
+import android.util.Patterns.EMAIL_ADDRESS
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 const val TAG = "MyLog"
+const val KEY= "screenState"
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         const val INITIAL = 0
         const val PROGRESS = 1
         const val SUCCESS = 2
-        const val FILED = 3
+        const val FAILED = 3
     }
 
     private var state = INITIAL
@@ -54,6 +57,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate ${savedInstanceState == null}")
+        savedInstanceState?.let {
+            state = it.getInt(KEY)
+        }
 
         val contentLayout = findViewById<LinearLayout>(R.id.contentLayout)
         val processBar = findViewById<ProgressBar>(R.id.progressBar)
@@ -69,33 +75,52 @@ class MainActivity : AppCompatActivity() {
 
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
-            if (Patterns.EMAIL_ADDRESS.matcher(textInputEditText.text.toString()).matches()) {
-                Snackbar.make(loginButton, "Go to postLogin", Snackbar.LENGTH_LONG)
-                loginButton.isEnabled = false
-                processBar.visibility = View.VISIBLE
-                contentLayout.visibility = View.GONE
+            if (EMAIL_ADDRESS.matcher(textInputEditText.text.toString()).matches()) {
                 hideKeyboard(textInputEditText)
+                contentLayout.visibility = View.GONE
+                processBar.visibility = View.VISIBLE
+                state = PROGRESS
                 Handler(Looper.myLooper()!!).postDelayed({
+                    state = FAILED
                     contentLayout.visibility = View.VISIBLE
                     processBar.visibility = View.GONE
-                    val dialog = BottomSheetDialog(this)
-                    val view = LayoutInflater.from(this).inflate(R.layout.dialog, contentLayout, false)
-                    dialog.setCancelable(false)
-                    view.findViewById<View>(R.id.closeButton).setOnClickListener {
-                        dialog.dismiss()
-                    }
-                    dialog.setContentView(view)
-                    dialog.show()
+                    showDialog(contentLayout)
                 }, 3000)
             } else {
                 textInputLayout.isErrorEnabled = true
                 textInputLayout.error = getString(R.string.invalid_email_address_msg)
             }
+
         }
 
         checkBox.setOnCheckedChangeListener {_, isChecked ->
             loginButton.isEnabled = isChecked
         }
+
+        when (state) {
+            FAILED -> showDialog(contentLayout)
+            SUCCESS -> {
+                state = INITIAL
+                Snackbar.make(contentLayout, "Success", Snackbar.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun showDialog(viewGroup: ViewGroup) {
+        val dialog = Dialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog, viewGroup, false)
+        dialog.setCancelable(false)
+        view.findViewById<View>(R.id.closeButton).setOnClickListener {
+            state = INITIAL
+            dialog.dismiss()
+        }
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY, state)
     }
 
     fun TextInputEditText.listenerChanges(block: (test: String) -> Unit) {
