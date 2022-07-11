@@ -6,7 +6,6 @@ import java.util.*
 class Model(private val dataSource: DataSource) {
     companion object {
         private const val COUNTER_KEY = "counterKey"
-        private const val TAG = "MyTag"
     }
 
     private var timer: Timer? = null
@@ -22,11 +21,9 @@ class Model(private val dataSource: DataSource) {
 
     fun start(textCallback: TextCallback) {
         callback = textCallback
-        Log.d(TAG, "    start: count is $count")
         if (count < 0) count = dataSource.getInt(COUNTER_KEY)
-        Log.d(TAG, "    started: with count $count")
         timer = Timer()
-        timer?.scheduleAtFixedRate(timerTask, 1000, 1000)
+        timer?.scheduleAtFixedRate(timerTask, 0, 1000)
     }
 
     fun stop() {
