@@ -17,9 +17,9 @@ class Door {
         }
     }
 }
-
-class LoggingTool {
-    fun log(message: String) {
-        Log.d(javaClass.canonicalName, message)
-    }
-}
+//
+//class LoggingTool {
+//    fun log(message: String) {
+//        Log.d(javaClass.canonicalName, message)
+//    }
+//}
