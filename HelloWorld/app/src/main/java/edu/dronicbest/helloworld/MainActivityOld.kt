@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 const val TAG = "MyLog"
-const val KEY= "screenState"
+const val KEY = "screenState"
 
 class MainActivityOld : AppCompatActivity() {
 
