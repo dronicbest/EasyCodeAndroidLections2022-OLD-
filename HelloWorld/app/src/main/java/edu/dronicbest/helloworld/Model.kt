@@ -1,35 +1,42 @@
 package edu.dronicbest.helloworld
 
-import android.util.Log
 import java.util.*
 
-class Model(private val dataSource: DataSource) {
-    companion object {
-        private const val COUNTER_KEY = "counterKey"
-    }
+class Model(
+    private val dataSource: DataSource,
+    private val timeTicker: TimeTicker
+) {
 
-    private var timer: Timer? = null
+    private val tickerCallback
+        get() = object : TimeTicker.Callback {
+            override fun tick() {
+                count++
+                callback?.updateText(count.toString())
+            }
+        }
+
     private var callback: TextCallback? = null
     private var count = -1
     private val timerTask
         get() = object : TimerTask() {
             override fun run() {
-                count++
                 callback?.updateText(count.toString())
+                count++
             }
         }
 
     fun start(textCallback: TextCallback) {
         callback = textCallback
         if (count < 0) count = dataSource.getInt(COUNTER_KEY)
-        timer = Timer()
-        timer?.scheduleAtFixedRate(timerTask, 0, 1000)
+        timeTicker.start(tickerCallback)
     }
 
     fun stop() {
-        Log.d(TAG, "    stop: with count $count")
         dataSource.saveInt(COUNTER_KEY, count)
-        timer?.cancel()
-        timer = null
+        timeTicker.stop()
+    }
+
+    companion object {
+        private const val COUNTER_KEY = "counterKey"
     }
 }
