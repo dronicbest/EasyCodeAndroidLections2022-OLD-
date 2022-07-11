@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener {
             button.isEnabled = false
             progressBar.visibility = View.VISIBLE
-            viewModel.jetJoke()
+            viewModel.getJoke()
         }
 
         viewModel.init(object : TextCallback {
