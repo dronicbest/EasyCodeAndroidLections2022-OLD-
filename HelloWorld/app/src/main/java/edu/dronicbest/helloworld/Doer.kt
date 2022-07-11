@@ -6,7 +6,7 @@ import android.util.Log
  * HelloWorld
  * @author dronicbest on 11.07.2022
  */
-class Door(private val logger: Logging) {
+class Doer(private val logger: Logging) {
     private var mainThingDone = false
 
     fun doMain() {
