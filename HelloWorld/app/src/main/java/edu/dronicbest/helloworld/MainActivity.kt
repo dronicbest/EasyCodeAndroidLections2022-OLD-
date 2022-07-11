@@ -1,14 +1,17 @@
 package edu.dronicbest.helloworld
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewModel: ViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel = (application as MyApplication).viewModel
         val textView: TextView = findViewById(R.id.textView)
         val observable = TextObservable()
         observable.observe(object : TextCallback {
@@ -16,7 +19,11 @@ class MainActivity : AppCompatActivity() {
                 textView.text = str
             }
         })
-        val viewModel = ViewModel(observable)
-        viewModel.init()
+        viewModel.init(observable)
+    }
+
+    override fun onDestroy() {
+        viewModel.clear()
+        super.onDestroy()
     }
 }
