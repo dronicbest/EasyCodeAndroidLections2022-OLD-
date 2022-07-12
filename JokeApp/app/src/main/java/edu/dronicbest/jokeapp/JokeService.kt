@@ -1,11 +1,15 @@
 package edu.dronicbest.jokeapp
 
+import retrofit2.Call
+import retrofit2.http.GET
+
 /**
  * JokeApp
  * @author dronicbest on 12.07.2022
  */
 interface JokeService {
-    fun getJoke(callback: ServiceCallback)
+    @GET("https://official-joke-api.appspot.com/random_joke/")
+    fun getJoke() : Call<JokeDTO>
 }
 
 interface ServiceCallback {
