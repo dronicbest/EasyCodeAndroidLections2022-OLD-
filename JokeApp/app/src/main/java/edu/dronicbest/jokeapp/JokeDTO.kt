@@ -16,5 +16,5 @@ data class JokeDTO(
     @SerializedName("punchline")
     private val punchline: String
 ) {
-    fun toJoke() = Joke(text, punchline)
+    fun toJoke() = BaseJoke(text, punchline)
 }

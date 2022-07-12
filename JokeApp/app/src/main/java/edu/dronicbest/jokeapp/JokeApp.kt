@@ -10,15 +10,16 @@ class JokeApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.google.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        viewModel = ViewModel(
-            BaseModel(
-                retrofit.create(JokeService::class.java),
-                BaseResourceManager(this)
-            )
-        )
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://www.google.com")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//        viewModel = ViewModel(
+//            BaseModel(
+//                retrofit.create(JokeService::class.java),
+//                BaseResourceManager(this)
+//            )
+//        )
+        viewModel = ViewModel(TestModel(BaseResourceManager(this)))
     }
 }

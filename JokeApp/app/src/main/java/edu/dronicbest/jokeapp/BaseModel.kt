@@ -15,17 +15,17 @@ class BaseModel(
     override fun getJoke() {
         service.getJoke().enqueue(object : retrofit2.Callback<JokeDTO> {
             override fun onResponse(call: Call<JokeDTO>, response: Response<JokeDTO>) {
-                if (response.isSuccessful) {
-                    callback?.provideSuccess(response.body()!!.toJoke())
-                } else {
-                    callback?.provideError(serviceUnavailable)
-                }
+//                if (response.isSuccessful) {
+//                    callback?.provideSuccess(response.body()!!.toJoke())
+//                } else {
+//                    callback?.provideError(serviceUnavailable)
+//                }
             }
             override fun onFailure(call: Call<JokeDTO>, t: Throwable) {
-                if (t is UnknownHostException)
-                    callback?.provideError(noConnection)
-                else
-                    callback?.provideError(serviceUnavailable)
+//                if (t is UnknownHostException)
+//                    callback?.provideError(noConnection)
+//                else
+//                    callback?.provideError(serviceUnavailable)
             }
         })
     }
