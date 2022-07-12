@@ -4,23 +4,24 @@ package edu.dronicbest.jokeapp
  * JokeApp
  * @author dronicbest on 12.07.2022
  */
-class TestModel : Model<Any, Any> {
-    private var callback: ResultCallback<Any, Any>? = null
-    private var count = 1
+class TestModel(resourceManager: ResourceManager) : Model {
+    private var callback: ResultCallback? = null
+    private var count = 0
+    private val noConnection = NoConnection(resourceManager)
+    private val serviceUnavailable = ServiceUnavailable(resourceManager)
 
     override fun getJoke() {
         Thread {
-            Thread.sleep(1000)
-            if (count % 2 == 0) {
-                callback?.provideSuccess("success")
-            } else {
-                callback?.provideError("error")
+            when (count) {
+                0 -> callback?.provideSuccess(Joke("testText", "testPunchline"))
+                1 -> callback?.provideError(noConnection)
+                2 -> callback?.provideError(serviceUnavailable)
             }
-            count++
+            if (++count == 3) count = 0
         }.start()
     }
 
-    override fun init(callback: ResultCallback<Any, Any>) {
+    override fun init(callback: ResultCallback) {
         this.callback = callback
     }
 
