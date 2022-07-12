@@ -2,32 +2,19 @@ package edu.dronicbest.jokeapp
 
 import retrofit2.Call
 import retrofit2.Response
-import java.net.UnknownHostException
 
 class BaseModel(
-    private val service: JokeService,
-    private val resourceManager: ResourceManager) : Model {
-
-    private var callback: ResultCallback? = null
+    private val cacheDataSource: CacheDataSource,
+    private val cloudDataSource: CloudDataSource,
+    private val resourceManager: ResourceManager
+) : Model {
     private val noConnection by lazy { NoConnection(resourceManager) }
     private val serviceUnavailable by lazy { ServiceUnavailable(resourceManager) }
+    private var jokeCallback: JokeCallback? = null
+    private var cachedJokeServerModel: JokeServerModel? = null
 
     override fun getJoke() {
-        service.getJoke().enqueue(object : retrofit2.Callback<JokeDTO> {
-            override fun onResponse(call: Call<JokeDTO>, response: Response<JokeDTO>) {
-//                if (response.isSuccessful) {
-//                    callback?.provideSuccess(response.body()!!.toJoke())
-//                } else {
-//                    callback?.provideError(serviceUnavailable)
-//                }
-            }
-            override fun onFailure(call: Call<JokeDTO>, t: Throwable) {
-//                if (t is UnknownHostException)
-//                    callback?.provideError(noConnection)
-//                else
-//                    callback?.provideError(serviceUnavailable)
-            }
-        })
+        cloudDataSource.getJoke(object : Joke)
     }
 
     override fun init(callback: ResultCallback) {

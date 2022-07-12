@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * JokeApp
  * @author dronicbest on 12.07.2022
  */
-data class JokeDTO(
+data class JokeServerModel(
     @SerializedName("id")
     private val id: Int,
     @SerializedName("type")
@@ -16,5 +16,7 @@ data class JokeDTO(
     @SerializedName("punchline")
     private val punchline: String
 ) {
-    fun toJoke() = BaseJoke(text, punchline)
+    fun toBaseJoke() = BaseJoke(text, punchline)
+    fun toFavoriteJoke() = FavoriteJoke(text, punchline)
+    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id, this)
 }

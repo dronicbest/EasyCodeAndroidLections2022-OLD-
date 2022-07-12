@@ -9,15 +9,29 @@ import retrofit2.http.GET
  */
 interface JokeService {
     @GET("https://official-joke-api.appspot.com/random_joke/")
-    fun getJoke() : Call<JokeDTO>
+    fun getJoke() : Call<JokeServerModel>
 }
 
 interface ServiceCallback {
-    fun returnSuccess(data: JokeDTO)
+    fun returnSuccess(data: JokeServerModel)
     fun returnError(type: ErrorType)
+}
+
+interface CacheDataSource {
+    fun addOrRemove(id: Int, joke: JokeServerModel): Joke
+}
+
+interface CloudDataSource {
+    fun getJoke(callback: JokeCallback)
+}
+
+interface JokeCallback {
+    fun provide(joke: JokeServerModel)
+    fun fail(error: ErrorType)
 }
 
 enum class ErrorType {
     NO_CONNECTION,
+    SERVICE_UNAVAILABLE,
     OTHER
 }
