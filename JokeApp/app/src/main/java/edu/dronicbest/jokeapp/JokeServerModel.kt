@@ -11,12 +11,22 @@ data class JokeServerModel(
     private val id: Int,
     @SerializedName("type")
     private val type: String,
+    @SerializedName("joke")
+    private val joke: String,
     @SerializedName("setup")
-    private val text: String,
-    @SerializedName("punchline")
+    private val setup: String,
+    @SerializedName("category")
     private val punchline: String
 ) {
-    fun toBaseJoke() = BaseJoke(text, punchline)
-    fun toFavoriteJoke() = FavoriteJoke(text, punchline)
+    fun toBaseJoke(): BaseJoke = if (joke == null)
+            BaseJoke(setup, punchline)
+        else
+            BaseJoke(joke, punchline)
+
+    fun toFavoriteJoke(): FavoriteJoke = if (joke == null)
+        FavoriteJoke(setup, punchline)
+    else
+        FavoriteJoke(joke, punchline)
+
     fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id, this)
 }

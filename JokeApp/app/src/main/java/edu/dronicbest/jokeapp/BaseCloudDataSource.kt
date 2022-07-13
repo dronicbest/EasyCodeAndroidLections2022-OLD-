@@ -9,7 +9,7 @@ import java.net.UnknownHostException
  * @author dronicbest on 12.07.2022
  */
 class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
-    override fun getJoke(callback: JokeCallback) {
+    override fun getJoke(callback: JokeCloudCallback) {
         service.getJoke().enqueue(object : retrofit2.Callback<JokeServerModel> {
             override fun onResponse(
                 call: Call<JokeServerModel>,

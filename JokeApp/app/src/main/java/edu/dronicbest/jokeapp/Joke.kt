@@ -26,6 +26,6 @@ class FavoriteJoke(text: String, punchline: String) : Joke(text, punchline) {
     override fun getIconResId(): Int = R.drawable.baseline_favorite_24
 }
 
-class FailedJoke(text: String, punchline: String) : Joke(text, punchline) {
+class FailedJoke(text: String, punchline: String = "") : Joke(text, punchline) {
     override fun getIconResId(): Int = 0
 }

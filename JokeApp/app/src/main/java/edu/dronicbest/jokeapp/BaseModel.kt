@@ -12,17 +12,52 @@ class BaseModel(
     private val serviceUnavailable by lazy { ServiceUnavailable(resourceManager) }
     private var jokeCallback: JokeCallback? = null
     private var cachedJokeServerModel: JokeServerModel? = null
+    private var getJokeFromCache = false
 
-    override fun getJoke() {
-        cloudDataSource.getJoke(object : Joke)
+    override fun chooseFavorites(cached: Boolean) {
+        getJokeFromCache = cached
     }
 
-    override fun init(callback: ResultCallback) {
-        this.callback = callback
+    override fun getJoke() {
+        if (getJokeFromCache) {
+            cacheDataSource.getJoke(object : JokeCacheCallback {
+                override fun provide(jokeServerModel: JokeServerModel) {
+                    cachedJokeServerModel = jokeServerModel
+                    jokeCallback?.provide(jokeServerModel.toFavoriteJoke())
+                }
+                override fun fail() {
+                    jokeCallback?.provide(FailedJoke(NoCachedJokes(resourceManager).getMessage()))
+                }
+            })
+        } else {
+            cloudDataSource.getJoke(object : JokeCloudCallback {
+                override fun provide(joke: JokeServerModel) {
+                    cachedJokeServerModel = joke
+                    jokeCallback?.provide(joke.toBaseJoke())
+                }
+
+                override fun fail(error: ErrorType) {
+                    cachedJokeServerModel = null
+                    val failure =
+                        if (error == ErrorType.NO_CONNECTION) noConnection else serviceUnavailable
+                    jokeCallback?.provide(FailedJoke(failure.getMessage()))
+                }
+            })
+        }
+    }
+
+    override fun init(callback: JokeCallback) {
+        this.jokeCallback = callback
     }
 
     override fun clear() {
-        callback = null
+        jokeCallback = null
+    }
+
+    override fun changeJokeStatus(jokeCallback: JokeCallback) {
+        cachedJokeServerModel?.change(cacheDataSource)?.let {
+            jokeCallback.provide(it)
+        }
     }
 
 }

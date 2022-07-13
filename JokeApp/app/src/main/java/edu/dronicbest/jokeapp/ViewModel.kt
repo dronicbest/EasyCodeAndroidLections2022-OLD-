@@ -6,15 +6,15 @@ class ViewModel(private val model: Model) {
 
     private var dataCallback: DataCallback? = null
 
+    private val jokeCallback = object : JokeCallback {
+        override fun provide(joke: Joke) {
+            dataCallback?.let { joke.map(it) }
+        }
+    }
+
     fun init(callback: DataCallback) {
         dataCallback = callback
-        model.init(object : ResultCallback {
-            override fun provideJoke(joke: Joke) {
-                dataCallback?.let {
-                    joke.map(it)
-                }
-            }
-        })
+        model.init(jokeCallback)
     }
 
     fun getJoke() {
@@ -25,12 +25,22 @@ class ViewModel(private val model: Model) {
         dataCallback = null
         model.clear()
     }
+
+    fun changeJokeStatus() {
+        model.changeJokeStatus(jokeCallback)
+    }
+
+    fun chooseFavorites(favorites: Boolean) {
+        model.chooseFavorites(favorites)
+    }
 }
 
 interface Model {
     fun getJoke()
-    fun init(callback: ResultCallback)
+    fun init(callback: JokeCallback)
     fun clear()
+    fun changeJokeStatus(jokeCallback: JokeCallback)
+    fun chooseFavorites(favorites: Boolean)
 }
 
 interface ResultCallback {

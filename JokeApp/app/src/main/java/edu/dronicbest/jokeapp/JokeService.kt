@@ -8,7 +8,7 @@ import retrofit2.http.GET
  * @author dronicbest on 12.07.2022
  */
 interface JokeService {
-    @GET("https://official-joke-api.appspot.com/random_joke/")
+    @GET("https://v2.jokeapi.dev/joke/Any")
     fun getJoke() : Call<JokeServerModel>
 }
 
@@ -18,16 +18,27 @@ interface ServiceCallback {
 }
 
 interface CacheDataSource {
+    fun getJoke(jokeCacheCallback: JokeCacheCallback)
     fun addOrRemove(id: Int, joke: JokeServerModel): Joke
 }
 
 interface CloudDataSource {
-    fun getJoke(callback: JokeCallback)
+    fun getJoke(callback: JokeCloudCallback)
 }
 
 interface JokeCallback {
+    fun provide(joke: Joke)
+//    fun fail(error: ErrorType)
+}
+
+interface JokeCloudCallback {
     fun provide(joke: JokeServerModel)
     fun fail(error: ErrorType)
+}
+
+interface JokeCacheCallback {
+    fun provide(jokeServerModel: JokeServerModel)
+    fun fail()
 }
 
 enum class ErrorType {

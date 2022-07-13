@@ -5,14 +5,24 @@ package edu.dronicbest.jokeapp
  * @author dronicbest on 12.07.2022
  */
 class TestCacheDataSource : CacheDataSource {
-    private val map = HashMap<Int, JokeServerModel>()
+    private val list = ArrayList<Pair<Int, JokeServerModel>>()
+
+    override fun getJoke(jokeCacheCallback: JokeCacheCallback) {
+        if (list.isEmpty())
+            jokeCacheCallback.fail()
+        else
+            jokeCacheCallback.provide(list.random().second)
+    }
 
     override fun addOrRemove(id: Int, jokeServerModel: JokeServerModel): Joke {
-        return if (map.containsKey(id)) {
-            val joke = map[id]!!.toBaseJoke()
+        var found = list.find {it.first == id}
+
+        return if (found != null) {
+            val joke = found.second.toBaseJoke()
+            list.remove(found)
             joke
         } else {
-            map[id] = jokeServerModel
+            list.add(Pair(id, jokeServerModel))
             jokeServerModel.toFavoriteJoke()
         }
     }
