@@ -18,7 +18,7 @@ interface ServiceCallback {
 }
 
 interface CacheDataSource {
-    fun getJoke(jokeCacheCallback: JokeCacheCallback)
+    fun getJoke(jokeCachedCallback: JokeCachedCallback)
     fun addOrRemove(id: Int, joke: JokeServerModel): Joke
 }
 
@@ -36,7 +36,7 @@ interface JokeCloudCallback {
     fun fail(error: ErrorType)
 }
 
-interface JokeCacheCallback {
+interface JokeCachedCallback {
     fun provide(jokeServerModel: JokeServerModel)
     fun fail()
 }

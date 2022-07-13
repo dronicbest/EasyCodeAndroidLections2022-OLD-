@@ -7,11 +7,11 @@ package edu.dronicbest.jokeapp
 class TestCacheDataSource : CacheDataSource {
     private val list = ArrayList<Pair<Int, JokeServerModel>>()
 
-    override fun getJoke(jokeCacheCallback: JokeCacheCallback) {
+    override fun getJoke(jokeCachedCallback: JokeCachedCallback) {
         if (list.isEmpty())
-            jokeCacheCallback.fail()
+            jokeCachedCallback.fail()
         else
-            jokeCacheCallback.provide(list.random().second)
+            jokeCachedCallback.provide(list.random().second)
     }
 
     override fun addOrRemove(id: Int, jokeServerModel: JokeServerModel): Joke {

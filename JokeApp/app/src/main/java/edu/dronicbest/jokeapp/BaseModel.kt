@@ -1,8 +1,5 @@
 package edu.dronicbest.jokeapp
 
-import retrofit2.Call
-import retrofit2.Response
-
 class BaseModel(
     private val cacheDataSource: CacheDataSource,
     private val cloudDataSource: CloudDataSource,
@@ -20,7 +17,7 @@ class BaseModel(
 
     override fun getJoke() {
         if (getJokeFromCache) {
-            cacheDataSource.getJoke(object : JokeCacheCallback {
+            cacheDataSource.getJoke(object : JokeCachedCallback {
                 override fun provide(jokeServerModel: JokeServerModel) {
                     cachedJokeServerModel = jokeServerModel
                     jokeCallback?.provide(jokeServerModel.toFavoriteJoke())
