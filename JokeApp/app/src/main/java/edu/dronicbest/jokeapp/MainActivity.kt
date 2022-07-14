@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val changeButton = findViewById<ImageButton>(R.id.changeButton)
-        changeButton.setOnClickListener { viewModel.changeJokeStatus() }
+        changeButton.setOnClickListener {
+            viewModel.changeJokeStatus()
+        }
         viewModel.init(object : DataCallback {
             override fun provideText(text: String) {
                 button.isEnabled = true
