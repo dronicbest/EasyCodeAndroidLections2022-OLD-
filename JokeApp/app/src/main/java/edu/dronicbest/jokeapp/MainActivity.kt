@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.actionButton)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         val textView = findViewById<TextView>(R.id.textView)
-//        val iconView = findViewById<ImageView>(R.id.iconView)
 
         progressBar.visibility = View.INVISIBLE
 
@@ -36,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         changeButton.setOnClickListener {
             viewModel.changeJokeStatus()
         }
+
         viewModel.init(object : DataCallback {
             override fun provideText(text: String) {
                 button.isEnabled = true
