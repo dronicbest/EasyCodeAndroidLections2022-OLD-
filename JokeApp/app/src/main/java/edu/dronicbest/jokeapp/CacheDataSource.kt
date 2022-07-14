@@ -5,6 +5,6 @@ package edu.dronicbest.jokeapp
  * @author dronicbest on 14.07.2022
  */
 interface CacheDataSource {
-    fun getJoke(jokeCachedCallback: JokeCachedCallback)
-    fun addOrRemove(id: Int, joke: Joke): JokeUiModel
+    suspend fun getJoke(): Result<Joke, Unit>
+    suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel
 }

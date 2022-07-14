@@ -21,7 +21,7 @@ class JokeApp : Application() {
 
         viewModel = ViewModel(
             BaseModel(
-                BaseCacheDataSource(Realm.getDefaultInstance()),
+                BaseCacheDataSource(BaseRealmProvider()),
                 BaseCloudDataSource(retrofit.create(JokeService::class.java)),
                 BaseResourceManager(this))
         )

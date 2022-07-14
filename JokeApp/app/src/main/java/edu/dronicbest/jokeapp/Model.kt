@@ -5,9 +5,9 @@ package edu.dronicbest.jokeapp
  * @author dronicbest on 14.07.2022
  */
 interface Model {
-    fun getJoke()
+    suspend fun getJoke(): JokeUiModel
     fun init(callback: JokeCallback)
     fun clear()
-    fun changeJokeStatus(jokeCallback: JokeCallback)
+    suspend fun changeJokeStatus(): JokeUiModel?
     fun chooseFavorites(favorites: Boolean)
 }

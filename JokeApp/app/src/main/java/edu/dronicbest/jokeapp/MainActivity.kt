@@ -35,13 +35,13 @@ class MainActivity : AppCompatActivity() {
         val changeButton = findViewById<ImageButton>(R.id.changeButton)
         changeButton.setOnClickListener { viewModel.changeJokeStatus() }
         viewModel.init(object : DataCallback {
-            override fun provideText(text: String) = runOnUiThread {
+            override fun provideText(text: String) {
                 button.isEnabled = true
                 progressBar.visibility = View.INVISIBLE
                 textView.text = text
             }
 
-            override fun provideIconRes(id: Int) = runOnUiThread {
+            override fun provideIconRes(id: Int) {
                 changeButton.setImageResource(id)
             }
         })

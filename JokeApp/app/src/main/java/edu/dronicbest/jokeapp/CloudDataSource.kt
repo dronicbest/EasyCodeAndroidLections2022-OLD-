@@ -5,5 +5,5 @@ package edu.dronicbest.jokeapp
  * @author dronicbest on 14.07.2022
  */
 interface CloudDataSource {
-    fun getJoke(callback: JokeCloudCallback)
+    suspend fun getJoke(): Result<JokeServerModel, ErrorType>
 }
