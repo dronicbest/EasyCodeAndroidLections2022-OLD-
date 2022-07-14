@@ -19,26 +19,16 @@ data class JokeServerModel(
     private val punchline: String
 ) {
 
-    fun toJokeRealm(): JokeRealm {
-        return JokeRealm().also {
-            it.id = id
-            it.type = type
-            it.text = if (joke == null) setup else joke
-            it.punchLine = punchline
-        }
-    }
-
-    fun toBaseJoke(): BaseJoke = if (joke == null)
-            BaseJoke(setup, punchline)
-        else
-            BaseJoke(joke, punchline)
-
-    fun toFavoriteJoke(): FavoriteJoke = if (joke == null)
-        FavoriteJoke(setup, punchline)
+    fun toJoke() = if (joke == null)
+        Joke(id, type, setup, punchline)
     else
-        FavoriteJoke(joke, punchline)
+        Joke(id, type, joke, punchline)
 
-    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id, this)
+
+
+
+
+
 
 
 }

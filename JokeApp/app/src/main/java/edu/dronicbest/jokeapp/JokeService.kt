@@ -11,38 +11,8 @@ interface JokeService {
     @GET("https://v2.jokeapi.dev/joke/Any")
     fun getJoke() : Call<JokeServerModel>
 }
-
-interface ServiceCallback {
-    fun returnSuccess(data: JokeServerModel)
-    fun returnError(type: ErrorType)
-}
-
-interface CacheDataSource {
-    fun getJoke(jokeCachedCallback: JokeCachedCallback)
-    fun addOrRemove(id: Int, joke: JokeServerModel): Joke
-}
-
-interface CloudDataSource {
-    fun getJoke(callback: JokeCloudCallback)
-}
-
-interface JokeCallback {
-    fun provide(joke: Joke)
-//    fun fail(error: ErrorType)
-}
-
-interface JokeCloudCallback {
-    fun provide(joke: JokeServerModel)
-    fun fail(error: ErrorType)
-}
-
-interface JokeCachedCallback {
-    fun provide(jokeServerModel: JokeServerModel)
-    fun fail()
-}
-
-enum class ErrorType {
-    NO_CONNECTION,
-    SERVICE_UNAVAILABLE,
-    OTHER
-}
+//
+//interface ServiceCallback {
+//    fun returnSuccess(data: JokeServerModel)
+//    fun returnError(type: ErrorType)
+//}

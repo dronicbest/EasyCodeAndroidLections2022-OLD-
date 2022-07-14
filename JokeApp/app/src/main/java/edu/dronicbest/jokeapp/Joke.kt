@@ -1,31 +1,28 @@
 package edu.dronicbest.jokeapp
 
-import androidx.annotation.DrawableRes
+import com.google.gson.annotations.SerializedName
 
 /**
  * JokeApp
- * @author dronicbest on 12.07.2022
+ * @author dronicbest on 14.07.2022
  */
-abstract class Joke(private val text: String, private val punchline: String) {
-    protected fun getJokeUi() = "$text\n$punchline"
+class Joke (
+    private val id: Int,
+    private val type: String,
+    private val text: String,
+    private val punchline: String
+) {
 
-    @DrawableRes
-    protected abstract fun getIconResId(): Int
-
-    fun map(callback: DataCallback) = callback.run {
-        provideText(getJokeUi())
-        provideIconRes(getIconResId())
+    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id, this)
+    fun toBaseJoke(): BaseJokeUiModel = BaseJokeUiModel(text, punchline)
+    fun toFavoriteJoke(): FavoriteJokeUiModel = FavoriteJokeUiModel(text, punchline)
+    fun toJokeRealm(): JokeRealm {
+        return JokeRealm().also {
+            it.id = id
+            it.type = type
+            it.text = text
+            it.punchLine = punchline
+        }
     }
-}
 
-class BaseJoke(text: String, punchline: String) : Joke(text, punchline) {
-    override fun getIconResId(): Int = R.drawable.baseline_favorite_border_24
-}
-
-class FavoriteJoke(text: String, punchline: String) : Joke(text, punchline) {
-    override fun getIconResId(): Int = R.drawable.baseline_favorite_24
-}
-
-class FailedJoke(text: String, punchline: String = "") : Joke(text, punchline) {
-    override fun getIconResId(): Int = 0
 }

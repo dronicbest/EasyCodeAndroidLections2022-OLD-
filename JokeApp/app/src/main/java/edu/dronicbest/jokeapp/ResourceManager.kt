@@ -10,7 +10,3 @@ import androidx.annotation.StringRes
 interface ResourceManager {
     fun getString(@StringRes stringResIdRes: Int): String
 }
-
-class BaseResourceManager(private val context: Context) : ResourceManager {
-    override fun getString(stringResIdRes: Int): String = context.getString(stringResIdRes)
-}
