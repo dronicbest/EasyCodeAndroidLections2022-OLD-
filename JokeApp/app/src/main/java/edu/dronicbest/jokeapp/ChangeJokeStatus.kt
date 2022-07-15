@@ -5,5 +5,5 @@ package edu.dronicbest.jokeapp
  * @author dronicbest on 15.07.2022
  */
 interface ChangeJokeStatus {
-    suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel
+    suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel?
 }
