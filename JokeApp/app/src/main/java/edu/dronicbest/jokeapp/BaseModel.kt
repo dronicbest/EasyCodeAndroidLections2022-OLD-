@@ -54,12 +54,12 @@ class BaseModel(
 
     override suspend fun changeJokeStatus(): JokeUiModel? = cachedJoke?.change(cacheDataSource)
 
-    override fun init(callback: JokeCallback) {
-        this.jokeCallback = callback
-    }
-
-    override fun clear() {
-        jokeCallback = null
-    }
+//    override fun init(callback: JokeCallback) {
+//        this.jokeCallback = callback
+//    }
+//
+//    override fun clear() {
+//        jokeCallback = null
+//    }
 
 }
