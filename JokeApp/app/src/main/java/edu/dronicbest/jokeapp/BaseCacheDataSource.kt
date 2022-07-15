@@ -41,7 +41,6 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
                     joke.toFavoriteJoke()
                 } else {
                     it.executeTransaction {
-                        // TODO
                         jokeRealm.deleteFromRealm()
                     }
                     joke.toBaseJoke()
