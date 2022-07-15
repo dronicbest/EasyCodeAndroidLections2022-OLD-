@@ -20,19 +20,32 @@ class BaseModel(
     }
 
     override suspend fun getJoke(): JokeUiModel = withContext(Dispatchers.IO) {
-        if (getJokeFromCache) {
-            return@withContext when (val result = cacheDataSource.getJoke()) {
-                is Result.Success<Joke> -> result.data.let {
-                    cachedJoke = it
-                    it.toFavoriteJoke()
-                }
-                is Result.Error -> {
-                    cachedJoke = null
-                    FailedJokeUiModel(noCachedJokes.getMessage())
-                }
-            }
-        } else {
-            return@withContext when (val result = cloudDataSource.getJoke()) {
+        val resultHandler = if (getJokeFromCache)
+            CacheResultHandler(cacheDataSource)
+        else
+            CloudResultHandler(cloudDataSource)
+        return@withContext resultHandler.process()
+    }
+
+    override suspend fun changeJokeStatus(): JokeUiModel? = cachedJoke?.change(cacheDataSource)
+
+    private interface ResultHandler<S, E> {
+        fun handleResult(result: Result<S, E>): JokeUiModel
+    }
+
+    private abstract inner class BaseResultHandler<S, E>
+        (private val jokeDataFetcher: JokeDataFetcher<S, E>) : ResultHandler<S, E> {
+
+        suspend fun process(): JokeUiModel {
+            return handleResult(jokeDataFetcher.getJoke())
+        }
+    }
+
+    private inner class CloudResultHandler(jokeDataFetcher: JokeDataFetcher<JokeServerModel, ErrorType>) :
+        BaseResultHandler<JokeServerModel, ErrorType>(jokeDataFetcher) {
+
+        override fun handleResult(result: Result<JokeServerModel, ErrorType>): JokeUiModel =
+            when (result) {
                 is Result.Success<JokeServerModel> -> {
                     result.data.toJoke().let {
                         cachedJoke = it
@@ -48,9 +61,21 @@ class BaseModel(
                     FailedJokeUiModel(failure.getMessage())
                 }
             }
-        }
     }
 
-    override suspend fun changeJokeStatus(): JokeUiModel? = cachedJoke?.change(cacheDataSource)
+    private inner class CacheResultHandler(jokeDataFetcher: JokeDataFetcher<Joke, Unit>) :
+        BaseResultHandler<Joke, Unit>(jokeDataFetcher) {
 
+        override fun handleResult(result: Result<Joke, Unit>): JokeUiModel =
+            when (result) {
+                is Result.Success<Joke> -> result.data.let {
+                    cachedJoke = it
+                    it.toFavoriteJoke()
+                }
+                is Result.Error -> {
+                    cachedJoke = null
+                    FailedJokeUiModel(noCachedJokes.getMessage())
+                }
+            }
+    }
 }
