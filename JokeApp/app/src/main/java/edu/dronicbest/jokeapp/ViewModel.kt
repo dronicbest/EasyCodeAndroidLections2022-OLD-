@@ -9,12 +9,6 @@ class ViewModel(private val model: Model) : ViewModel() {
 
     private var dataCallback: DataCallback? = null
 
-    private val jokeCallback = object : JokeCallback {
-        override fun provide(jokeUiModel: JokeUiModel) {
-            dataCallback?.let { jokeUiModel.map(it) }
-        }
-    }
-
     fun init(callback: DataCallback) {
         dataCallback = callback
     }
