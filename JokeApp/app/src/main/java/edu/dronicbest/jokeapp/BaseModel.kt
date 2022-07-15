@@ -15,7 +15,7 @@ class BaseModel(
     private var cachedJoke: Joke? = null
     private var getJokeFromCache = false
 
-    override fun chooseFavorites(cached: Boolean) {
+    override fun chooseDataSource(cached: Boolean) {
         getJokeFromCache = cached
     }
 

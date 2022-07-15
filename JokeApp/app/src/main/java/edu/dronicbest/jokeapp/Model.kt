@@ -7,5 +7,5 @@ package edu.dronicbest.jokeapp
 interface Model {
     suspend fun getJoke(): JokeUiModel
     suspend fun changeJokeStatus(): JokeUiModel?
-    fun chooseFavorites(favorites: Boolean)
+    fun chooseDataSource(cached: Boolean)
 }

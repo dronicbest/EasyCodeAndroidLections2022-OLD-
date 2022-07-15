@@ -30,6 +30,6 @@ class ViewModel(private val model: Model) : ViewModel() {
     }
 
     fun chooseFavorites(favorites: Boolean) {
-        model.chooseFavorites(favorites)
+        model.chooseDataSource(favorites)
     }
 }
