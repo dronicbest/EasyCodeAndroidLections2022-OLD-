@@ -1,13 +1,20 @@
 package edu.dronicbest.jokeapp
 
 import android.app.Application
-import com.google.gson.Gson
+import edu.dronicbest.jokeapp.data.cache.BaseCacheDataSource
+import edu.dronicbest.jokeapp.data.cache.BaseCachedJoke
+import edu.dronicbest.jokeapp.data.cache.BaseRealmProvider
+import edu.dronicbest.jokeapp.data.cache.CacheResultHandler
+import edu.dronicbest.jokeapp.data.net.BaseCloudDataSource
+import edu.dronicbest.jokeapp.data.net.CloudResultHandler
+import edu.dronicbest.jokeapp.data.net.JokeService
+import edu.dronicbest.jokeapp.presentation.*
 import io.realm.Realm
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class JokeApp : Application() {
-    lateinit var viewModel: ViewModel
+    lateinit var viewModel: BaseViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -23,7 +30,7 @@ class JokeApp : Application() {
         val cacheDataSource = BaseCacheDataSource(BaseRealmProvider())
         val resourceManager = BaseResourceManager(this)
 
-        viewModel = ViewModel(
+        viewModel = BaseViewModel(
             BaseModel(
                 cacheDataSource,
                 CacheResultHandler(
@@ -38,7 +45,8 @@ class JokeApp : Application() {
                     ServiceUnavailable(resourceManager)
                 ),
                 cachedJoke
-            )
+            ),
+            BaseCommunication()
         )
     }
 }
