@@ -46,19 +46,23 @@ class BaseModel(
         protected abstract fun handleResult(result: Result<S, E>): JokeUiModel
     }
 
-    private inner class CloudResultHandler(jokeDataFetcher: JokeDataFetcher<JokeServerModel, ErrorType>) :
-        BaseResultHandler<JokeServerModel, ErrorType>(jokeDataFetcher) {
+    private inner class CloudResultHandler(
+        private val cachedJoke: CachedJoke,
+        jokeDataFetcher: JokeDataFetcher<JokeServerModel, ErrorType>,
+        private val noConnection: JokeFailure,
+        private val serviceUnavailable: JokeFailure
+    ) : BaseResultHandler<JokeServerModel, ErrorType>(jokeDataFetcher) {
 
         override fun handleResult(result: Result<JokeServerModel, ErrorType>): JokeUiModel =
             when (result) {
                 is Result.Success<JokeServerModel> -> {
                     result.data.toJoke().let {
-                        cachedJoke = it
+                        cachedJoke.saveJoke(it)
                         it.toBaseJoke()
                     }
                 }
                 is Result.Error<ErrorType> -> {
-                    cachedJoke = null
+                    cachedJoke.clear()
                     val failure = if (result.exception == ErrorType.NO_CONNECTION)
                         noConnection
                     else
