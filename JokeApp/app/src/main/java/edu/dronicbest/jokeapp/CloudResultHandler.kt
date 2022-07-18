@@ -1,0 +1,31 @@
+package edu.dronicbest.jokeapp
+
+/**
+ * JokeApp
+ * @author dronicbest on 18.07.2022
+ */
+class CloudResultHandler(
+    private val cachedJoke: CachedJoke,
+    jokeDataFetcher: JokeDataFetcher<JokeServerModel, ErrorType>,
+    private val noConnection: JokeFailure,
+    private val serviceUnavailable: JokeFailure
+) : BaseResultHandler<JokeServerModel, ErrorType>(jokeDataFetcher) {
+
+    override fun handleResult(result: Result<JokeServerModel, ErrorType>): JokeUiModel =
+        when (result) {
+            is Result.Success<JokeServerModel> -> {
+                result.data.toJoke().let {
+                    cachedJoke.saveJoke(it)
+                    it.toBaseJoke()
+                }
+            }
+            is Result.Error<ErrorType> -> {
+                cachedJoke.clear()
+                val failure = if (result.exception == ErrorType.NO_CONNECTION)
+                    noConnection
+                else
+                    serviceUnavailable
+                FailedJokeUiModel(failure.getMessage())
+            }
+        }
+}
