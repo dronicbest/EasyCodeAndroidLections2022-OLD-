@@ -37,7 +37,7 @@ class BaseModel(
     }
 
     private abstract inner class BaseResultHandler<S, E>
-        (private val jokeDataFetcher: JokeDataFetcher<S, E>) : ResultHandler<S, E> {
+        (private val jokeDataFetcher: JokeDataFetcher<S, E>) {
 
         suspend fun process(): JokeUiModel {
             return handleResult(jokeDataFetcher.getJoke())
@@ -72,17 +72,20 @@ class BaseModel(
             }
     }
 
-    private inner class CacheResultHandler(jokeDataFetcher: JokeDataFetcher<Joke, Unit>) :
-        BaseResultHandler<Joke, Unit>(jokeDataFetcher) {
+    private inner class CacheResultHandler(
+        private val cachedJoke: CachedJoke,
+        jokeDataFetcher: JokeDataFetcher<Joke, Unit>,
+        private val noCachedJokes: JokeFailure
+    ) : BaseResultHandler<Joke, Unit>(jokeDataFetcher) {
 
         override fun handleResult(result: Result<Joke, Unit>): JokeUiModel =
             when (result) {
                 is Result.Success<Joke> -> result.data.let {
-                    cachedJoke = it
+                    cachedJoke.saveJoke(it)
                     it.toFavoriteJoke()
                 }
                 is Result.Error -> {
-                    cachedJoke = null
+                    cachedJoke.clear()
                     FailedJokeUiModel(noCachedJokes.getMessage())
                 }
             }
