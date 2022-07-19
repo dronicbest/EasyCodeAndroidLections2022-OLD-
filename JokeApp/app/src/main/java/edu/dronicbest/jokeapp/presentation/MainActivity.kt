@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import edu.dronicbest.jokeapp.JokeApp
 import edu.dronicbest.jokeapp.R
+import edu.dronicbest.jokeapp.presentation.custom_views.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = (application as JokeApp).viewModel
         val button = findViewById<Button>(R.id.actionButton)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-        val textView = findViewById<TextView>(R.id.textView)
+        val textView = findViewById<CorrectTextView>(R.id.textView)
 
         progressBar.visibility = View.INVISIBLE
 
@@ -47,7 +48,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.observe(this) { state ->
-            state.show(progressBar, button, textView, changeButton)
+            state.show(
+                object : ShowView {
+                    override fun show(show: Boolean) {
+                        progressBar.visibility = if (show) View.VISIBLE else View.INVISIBLE
+                    }
+                },
+                object : EnableView {
+                    override fun enable(enable: Boolean) {
+                        button.isEnabled = enable
+                    }
+                },
+                textView,
+                object : ShowImage {
+                    override fun show(id: Int) {
+                        changeButton.setImageResource(id)
+                    }
+                }
+            )
         }
     }
 

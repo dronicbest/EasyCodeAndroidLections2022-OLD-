@@ -1,11 +1,14 @@
 package edu.dronicbest.jokeapp.presentation
 
-import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import edu.dronicbest.jokeapp.presentation.custom_views.EnableView
+import edu.dronicbest.jokeapp.presentation.custom_views.ShowImage
+import edu.dronicbest.jokeapp.presentation.custom_views.ShowText
+import edu.dronicbest.jokeapp.presentation.custom_views.ShowView
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +23,6 @@ class BaseViewModel(
     fun changeJokeStatus() = viewModelScope.launch(dispatcher) {
         model.changeJokeStatus()?.let {
             it.show(communication)
-//            communication.showData(it.getData())
         }
     }
 
@@ -31,40 +33,43 @@ class BaseViewModel(
 
     fun chooseFavorites(favorites: Boolean) = model.chooseDataSource(favorites)
 
-    fun observe(owner: LifecycleOwner, observer: Observer<BaseViewModel.State>) {
+    fun observe(owner: LifecycleOwner, observer: Observer<State>) {
         communication.observe(owner, observer)
     }
 
     sealed class State {
         abstract fun show(
-            process: View,
-            button: Button,
-            textView: TextView,
-            imageButton: ImageButton
+            process: ShowView,
+            button: EnableView,
+            textView: ShowText,
+            imageButton: ShowImage
         )
+
         object Progress : State() {
             override fun show(
-                process: View,
-                button: Button,
-                textView: TextView,
-                imageButton: ImageButton
+                process: ShowView,
+                button: EnableView,
+                textView: ShowText,
+                imageButton: ShowImage
             ) {
-                process.visibility = View.VISIBLE
-                button.isEnabled = false
+                process.show(true)
+                button.enable(false)
             }
         }
+
         data class Initial(val text: String, @DrawableRes val id: Int) : State() {
             override fun show(
-                process: View,
-                button: Button,
-                textView: TextView,
-                imageButton: ImageButton
+                process: ShowView,
+                button: EnableView,
+                textView: ShowText,
+                imageButton: ShowImage
             ) {
-                process.visibility = View.INVISIBLE
-                button.isEnabled = true
-                textView.text = text
-                imageButton.setImageResource(id)
+                process.show(false)
+                button.enable(true)
+                textView.show(text)
+                imageButton.show(id)
             }
         }
+
     }
 }
