@@ -1,5 +1,7 @@
 package edu.dronicbest.jokeapp.presentation
 
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -29,6 +31,25 @@ class BaseViewModelTest {
         assertNotEquals(0, actualId)
     }
 
+    @ExperimentalCoroutinesApi
+    @Test
+    fun test_get_joke_from_cloud_fail(): Unit = runBlocking {
+        val model = TestModel()
+        val communication = TestCommunication()
+        val viewModel = BaseViewModel(model, communication, TestCoroutineDispatcher())
+
+        model.success = false
+        viewModel.chooseFavorites(false)
+        viewModel.getJoke()
+
+        val actualText = communication.text
+        val actualId = communication.id
+        val expectedText = "no connection\n"
+        val exceptedId = 0
+        assertEquals(expectedText, actualText)
+        assertNotEquals(exceptedId, actualId)
+    }
+
     private inner class TestModel : Model {
 
         private val cacheJokeUiModel = BaseJokeUiModel("cachedJokeText", "cachedJokePunchline")
@@ -40,7 +61,24 @@ class BaseViewModelTest {
         private var cachedJoke: JokeUiModel? = null
 
         override suspend fun getJoke(): JokeUiModel {
-            TODO("Not yet implemented")
+            return if (success) {
+                if (getFromCache) {
+                    cacheJokeUiModel.also {
+                        cachedJoke = it
+                    }
+                } else {
+                    cloudJokeUiModel.also {
+                        cachedJoke = it
+                    }
+                }
+            } else {
+                cachedJoke = null
+                if (getFromCache) {
+                    cacheJokeFailure
+                } else {
+                    cloudJokeFailure
+                }
+            }
         }
 
         override suspend fun changeJokeStatus(): JokeUiModel? {
@@ -51,5 +89,20 @@ class BaseViewModelTest {
             getFromCache = cached
         }
 
+    }
+
+    private inner class TestCommunication : Communication {
+        var text = ""
+        var id = -1
+        var observedCount = 0
+
+        override fun showData(data: Pair<String, Int>) {
+            text = data.first
+            id = data.second
+        }
+
+        override fun observe(owner: LifecycleOwner, observer: Observer<Pair<String, Int>>) {
+            observedCount++
+        }
     }
 }

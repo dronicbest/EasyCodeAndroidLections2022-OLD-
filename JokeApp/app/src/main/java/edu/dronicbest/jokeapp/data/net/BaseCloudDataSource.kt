@@ -12,6 +12,7 @@ import java.net.UnknownHostException
 class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
     override suspend fun getJoke(): Result<JokeServerModel, ErrorType> {
         return try {
+//            Thread.sleep(5000)
             val result: JokeServerModel = service.getJoke().execute().body()!!
             Log.d("threadLogTag", "currentThread ${Thread.currentThread().name}")
             Result.Success(result)

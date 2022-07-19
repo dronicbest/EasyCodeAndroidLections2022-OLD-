@@ -2,6 +2,7 @@ package edu.dronicbest.jokeapp.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import edu.dronicbest.jokeapp.JokeApp
@@ -11,6 +12,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: BaseViewModel
 
+    override fun onPause() {
+        super.onPause()
+        Log.d("MainActivity", "onPause")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("MainActivity", "onResume")
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,8 +33,6 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
 
         button.setOnClickListener {
-            button.isEnabled = false
-            progressBar.visibility = View.VISIBLE
             viewModel.getJoke()
         }
 
@@ -38,11 +46,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeJokeStatus()
         }
 
-        viewModel.observe(this) { (text, drawableResId) ->
-            button.isEnabled = true
-            progressBar.visibility = View.INVISIBLE
-            textView.text = text
-            changeButton.setImageResource(drawableResId)
+        viewModel.observe(this) { state ->
+            state.show(progressBar, button, textView, changeButton)
         }
     }
 

@@ -12,6 +12,7 @@ abstract class JokeUiModel(private val text: String, private val punchline: Stri
     @DrawableRes
     protected abstract fun getIconResId(): Int
 
-    fun getData() = Pair(text(), getIconResId())
-
+    fun show(communication: Communication) = communication.showState(
+        BaseViewModel.State.Initial(text(), getIconResId())
+    )
 }
