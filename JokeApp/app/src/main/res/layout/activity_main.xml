@@ -28,7 +28,7 @@
             android:gravity="center"
             tools:text="Joke or error message" />
 
-        <ImageButton
+        <edu.dronicbest.jokeapp.presentation.custom_views.CorrectImageButton
             android:background="?selectableItemBackground"
             android:padding="@dimen/padding"
             android:layout_gravity="center_vertical"
@@ -39,14 +39,14 @@
 
     </LinearLayout>
 
-    <ProgressBar
+    <edu.dronicbest.jokeapp.presentation.custom_views.CorrectProgressBar
         android:indeterminate="true"
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <Button
+    <edu.dronicbest.jokeapp.presentation.custom_views.CorrectButton
         android:layout_width="wrap_content"
         android:id="@+id/actionButton"
         android:layout_height="wrap_content"
