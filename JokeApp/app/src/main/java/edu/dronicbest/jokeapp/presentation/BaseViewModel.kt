@@ -38,34 +38,33 @@ class BaseViewModel(
     }
 
     sealed class State {
-        abstract fun show(
-            process: ShowView,
+        fun show(
+            progress: ShowView,
             button: EnableView,
             textView: ShowText,
             imageButton: ShowImage
-        )
+        ) {
+            show(progress, button)
+            show(textView, imageButton)
+        }
+
+        protected open fun show(progress: ShowView, button: EnableView) {}
+        protected open fun show(textView: ShowText, imageButton: ShowImage) {}
 
         object Progress : State() {
-            override fun show(
-                process: ShowView,
-                button: EnableView,
-                textView: ShowText,
-                imageButton: ShowImage
-            ) {
-                process.show(true)
+            override fun show(progress: ShowView, button: EnableView) {
+                progress.show(true)
                 button.enable(false)
             }
         }
 
         data class Initial(val text: String, @DrawableRes val id: Int) : State() {
-            override fun show(
-                process: ShowView,
-                button: EnableView,
-                textView: ShowText,
-                imageButton: ShowImage
-            ) {
-                process.show(false)
+            override fun show(progress: ShowView, button: EnableView) {
+                progress.show(false)
                 button.enable(true)
+            }
+
+            override fun show(textView: ShowText, imageButton: ShowImage) {
                 textView.show(text)
                 imageButton.show(id)
             }
