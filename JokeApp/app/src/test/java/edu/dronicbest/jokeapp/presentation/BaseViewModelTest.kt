@@ -50,7 +50,7 @@ class BaseViewModelTest {
         assertNotEquals(exceptedId, actualId)
     }
 
-    private inner class TestModel : Model {
+    private inner class TestModel : JokeRepository {
 
         private val cacheJokeUiModel = BaseJokeUiModel("cachedJokeText", "cachedJokePunchline")
         private val cacheJokeFailure = FailedJokeUiModel("cacheFailed")

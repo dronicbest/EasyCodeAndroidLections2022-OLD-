@@ -15,7 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class BaseViewModel(
-    private val model: Model,
+    private val model: JokeRepository,
     private val communication: Communication,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {

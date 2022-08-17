@@ -14,7 +14,7 @@ class BaseModel(
     private val cacheResultHandler: CacheResultHandler,
     private val cloudResultHandler: CloudResultHandler,
     private val cachedJoke: CachedJoke
-) : Model {
+) : JokeRepository {
     private var currentResultHandler: BaseResultHandler<*, *> = cloudResultHandler
 
     override fun chooseDataSource(cached: Boolean) {

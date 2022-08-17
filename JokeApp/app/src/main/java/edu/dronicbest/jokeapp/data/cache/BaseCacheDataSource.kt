@@ -15,7 +15,7 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
 
     override suspend fun getJoke(): Result<Joke, Unit> {
         realmProvider.provide().use {
-            val jokes = it.where(JokeRealm::class.java).findAll()
+            val jokes = it.where(JokeRealmModel::class.java).findAll()
             if (jokes.isEmpty())
                 return Result.Error(Unit)
             else
@@ -25,7 +25,7 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
                             jokeRealm.id,
                             jokeRealm.type,
                             jokeRealm.text,
-                            jokeRealm.punchLine
+                            jokeRealm.punchline
                         )
                     )
                 }
@@ -35,7 +35,7 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
     override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
         return withContext(Dispatchers.IO) {
             Realm.getDefaultInstance().use {
-                val jokeRealm = it.where(JokeRealm::class.java).equalTo("id", id).findFirst()
+                val jokeRealm = it.where(JokeRealmModel::class.java).equalTo("id", id).findFirst()
                 if (jokeRealm == null) {
                     it.executeTransaction {
                         val newJoke = joke.toJokeRealm()
