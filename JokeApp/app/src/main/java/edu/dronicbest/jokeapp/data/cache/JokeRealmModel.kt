@@ -1,5 +1,6 @@
 package edu.dronicbest.jokeapp.data.cache
 
+import edu.dronicbest.jokeapp.data.JokeDataModel
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -11,6 +12,8 @@ open class JokeRealmModel : RealmObject() {
     @PrimaryKey
     var id: Int = -1
     var text: String = ""
-    var punchline: String = ""
+    var punchLine: String = ""
     var type: String = ""
+
+    fun toJokeDataModel() = JokeDataModel(id, type, text, punchLine)
 }

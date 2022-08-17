@@ -25,7 +25,7 @@ class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataS
                             jokeRealm.id,
                             jokeRealm.type,
                             jokeRealm.text,
-                            jokeRealm.punchline
+                            jokeRealm.punchLine
                         )
                     )
                 }

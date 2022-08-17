@@ -1,6 +1,7 @@
 package edu.dronicbest.jokeapp.data.net
 
 import com.google.gson.annotations.SerializedName
+import edu.dronicbest.jokeapp.data.JokeDataModel
 import edu.dronicbest.jokeapp.domain.Joke
 
 /**
@@ -20,16 +21,14 @@ data class JokeServerModel(
     private val punchline: String
 ) {
 
+    fun toJokeDataModel() = if (joke == null)
+        JokeDataModel(id, type, setup, punchline)
+    else
+        JokeDataModel(id, type, joke, punchline)
+
     fun toJoke() = if (joke == null)
         Joke(id, type, setup, punchline)
     else
         Joke(id, type, joke, punchline)
-
-
-
-
-
-
-
 
 }

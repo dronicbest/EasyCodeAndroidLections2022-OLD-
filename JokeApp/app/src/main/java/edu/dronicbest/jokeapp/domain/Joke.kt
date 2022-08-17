@@ -25,7 +25,7 @@ class Joke (
             it.id = id
             it.type = type
             it.text = text
-            it.punchline = punchline
+            it.punchLine = punchline
         }
     }
 
