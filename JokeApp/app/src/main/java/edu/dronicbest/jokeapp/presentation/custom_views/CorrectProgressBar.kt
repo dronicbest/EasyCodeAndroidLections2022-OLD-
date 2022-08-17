@@ -9,7 +9,7 @@ import android.widget.ProgressBar
  * JokeApp
  * @author dronicbest on 29.07.2022
  */
-class CorrectProgressBar : ProgressBar, ShowView{
+class CorrectProgressBar : ProgressBar, ShowView {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
