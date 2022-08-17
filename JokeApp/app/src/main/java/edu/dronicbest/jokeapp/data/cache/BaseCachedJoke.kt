@@ -1,5 +1,6 @@
 package edu.dronicbest.jokeapp.data.cache
 
+import edu.dronicbest.jokeapp.data.JokeDataModel
 import edu.dronicbest.jokeapp.domain.Joke
 import edu.dronicbest.jokeapp.presentation.JokeUiModel
 
@@ -8,17 +9,17 @@ import edu.dronicbest.jokeapp.presentation.JokeUiModel
  * @author dronicbest on 18.07.2022
  */
 class BaseCachedJoke : CachedJoke {
-    private var cached: Joke? = null
+    private var cached: ChangeJoke = ChangeJoke.Empty()
 
-    override fun saveJoke(joke: Joke) {
+    override fun saveJoke(joke: JokeDataModel) {
         cached = joke
     }
 
     override fun clear() {
-        cached = null
+        cached = ChangeJoke.Empty()
     }
 
-    override suspend fun change(changeJokeStatus: ChangeJokeStatus): JokeUiModel? {
-        return cached?.change(changeJokeStatus)
+    override suspend fun change(changeJokeStatus: ChangeJokeStatus): JokeDataModel {
+        return cached.change(changeJokeStatus)
     }
 }

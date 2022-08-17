@@ -1,8 +1,8 @@
 package edu.dronicbest.jokeapp.data.net
 
-import android.util.Log
-import edu.dronicbest.jokeapp.data.ErrorType
-import edu.dronicbest.jokeapp.data.Result
+import edu.dronicbest.jokeapp.data.JokeDataModel
+import edu.dronicbest.jokeapp.domain.exceptions.NoConnectionException
+import edu.dronicbest.jokeapp.domain.exceptions.ServiceUnavailableException
 import java.net.UnknownHostException
 
 /**
@@ -10,18 +10,14 @@ import java.net.UnknownHostException
  * @author dronicbest on 12.07.2022
  */
 class BaseCloudDataSource(private val service: JokeService) : CloudDataSource {
-    override suspend fun getJoke(): Result<JokeServerModel, ErrorType> {
-        return try {
-//            Thread.sleep(5000)
-            val result: JokeServerModel = service.getJoke().execute().body()!!
-            Log.d("threadLogTag", "currentThread ${Thread.currentThread().name}")
-            Result.Success(result)
+    override suspend fun getJoke(): JokeDataModel {
+        try {
+            return service.getJoke().execute().body()!!.map()
         } catch (e: Exception) {
-            val errorType = if (e is UnknownHostException)
-                ErrorType.NO_CONNECTION
+            if (e is UnknownHostException)
+                throw NoConnectionException()
             else
-                ErrorType.SERVICE_UNAVAILABLE
-            Result.Error(errorType)
+                throw ServiceUnavailableException()
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
  * @author dronicbest on 18.07.2022
  */
 interface Communication {
-    fun showState(state: BaseViewModel.State)
-    fun observe(owner: LifecycleOwner, observer: Observer<BaseViewModel.State>)
+    fun showState(state: State)
+    fun observe(owner: LifecycleOwner, observer: Observer<State>)
+    fun isState(type: Int): Boolean
 }

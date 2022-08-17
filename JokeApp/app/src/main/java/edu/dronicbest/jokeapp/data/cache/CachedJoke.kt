@@ -1,5 +1,6 @@
 package edu.dronicbest.jokeapp.data.cache
 
+import edu.dronicbest.jokeapp.data.JokeDataModel
 import edu.dronicbest.jokeapp.domain.Joke
 
 /**
@@ -7,6 +8,6 @@ import edu.dronicbest.jokeapp.domain.Joke
  * @author dronicbest on 15.07.2022
  */
 interface CachedJoke : ChangeJoke {
-    fun saveJoke(joke: Joke)
+    fun saveJoke(joke: JokeDataModel)
     fun clear()
 }

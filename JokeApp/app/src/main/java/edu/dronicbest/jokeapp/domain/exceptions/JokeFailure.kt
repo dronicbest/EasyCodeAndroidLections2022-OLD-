@@ -1,4 +1,4 @@
-package edu.dronicbest.jokeapp.presentation
+package edu.dronicbest.jokeapp.domain.exceptions
 
 /**
  * JokeApp

@@ -1,32 +1,31 @@
 package edu.dronicbest.jokeapp.domain
 
-import edu.dronicbest.jokeapp.presentation.BaseJokeUiModel
-import edu.dronicbest.jokeapp.presentation.FavoriteJokeUiModel
-import edu.dronicbest.jokeapp.data.cache.ChangeJoke
-import edu.dronicbest.jokeapp.data.cache.ChangeJokeStatus
-import edu.dronicbest.jokeapp.data.cache.JokeRealmModel
+import edu.dronicbest.jokeapp.core.Mapper
+import edu.dronicbest.jokeapp.domain.exceptions.JokeFailure
+import edu.dronicbest.jokeapp.presentation.*
 
 /**
  * JokeApp
  * @author dronicbest on 14.07.2022
  */
-class Joke (
-    private val id: Int,
-    private val type: String,
-    private val text: String,
-    private val punchline: String
-) : ChangeJoke {
+sealed class Joke : Mapper<JokeUiModel> {
 
-    override suspend fun change(changeJokeStatus: ChangeJokeStatus) = changeJokeStatus.addOrRemove(id, this)
-    fun toBaseJoke(): BaseJokeUiModel = BaseJokeUiModel(text, punchline)
-    fun toFavoriteJoke(): FavoriteJokeUiModel = FavoriteJokeUiModel(text, punchline)
-    fun toJokeRealm(): JokeRealmModel {
-        return JokeRealmModel().also {
-            it.id = id
-            it.type = type
-            it.text = text
-            it.punchLine = punchline
+    class Success(
+        private val text: String,
+        private val punchline: String,
+        private val favorite: Boolean
+    ) : Joke() {
+        override fun map(): JokeUiModel {
+            return if (favorite)
+                FavoriteJokeUiModel(text, punchline)
+            else
+                BaseJokeUiModel(text, punchline)
         }
     }
 
+    class Failed(private val failure: JokeFailure) : Joke() {
+        override fun map(): JokeUiModel {
+            return FailedJokeUiModel(failure.getMessage())
+        }
+    }
 }

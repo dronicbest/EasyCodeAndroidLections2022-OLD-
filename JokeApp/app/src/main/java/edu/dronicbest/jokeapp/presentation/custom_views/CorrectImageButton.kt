@@ -12,7 +12,7 @@ class CorrectImageButton : androidx.appcompat.widget.AppCompatImageButton, ShowI
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    override fun show(id: Int) {
-        setImageResource(id)
+    override fun show(arg: Int) {
+        setImageResource(arg)
     }
 }

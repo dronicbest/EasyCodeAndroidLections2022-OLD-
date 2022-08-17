@@ -5,6 +5,3 @@ package edu.dronicbest.jokeapp.presentation.custom_views
  * @author dronicbest on 19.07.2022
  */
 interface ShowView : Show<Boolean>
-//{
-//    fun show(show: Boolean)
-//}

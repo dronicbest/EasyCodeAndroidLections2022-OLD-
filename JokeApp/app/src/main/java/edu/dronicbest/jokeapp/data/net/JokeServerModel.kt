@@ -22,14 +22,9 @@ data class JokeServerModel (
     private val punchline: String
 )  : Mapper<JokeDataModel> {
 
-    override fun to() = if (joke == null)
-        JokeDataModel(id, type, setup, punchline)
+    override fun map() = if (joke == null)
+        JokeDataModel(id, setup, punchline)
     else
-        JokeDataModel(id, type, joke, punchline)
-
-    fun toJoke() = if (joke == null)
-        Joke(id, type, setup, punchline)
-    else
-        Joke(id, type, joke, punchline)
+        JokeDataModel(id, joke, punchline)
 
 }

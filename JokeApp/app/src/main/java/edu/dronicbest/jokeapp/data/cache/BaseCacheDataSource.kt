@@ -1,9 +1,8 @@
 package edu.dronicbest.jokeapp.data.cache
 
-import edu.dronicbest.jokeapp.data.Result
-import edu.dronicbest.jokeapp.domain.Joke
-import edu.dronicbest.jokeapp.presentation.JokeUiModel
-import io.realm.Realm
+import edu.dronicbest.jokeapp.core.JokeDataModelMapper
+import edu.dronicbest.jokeapp.data.JokeDataModel
+import edu.dronicbest.jokeapp.domain.exceptions.NoCachedJokesException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -11,44 +10,37 @@ import kotlinx.coroutines.withContext
  * JokeApp
  * @author dronicbest on 13.07.2022
  */
-class BaseCacheDataSource(private val realmProvider: RealmProvider) : CacheDataSource {
+class BaseCacheDataSource(
+    private val realmProvider: RealmProvider,
+    private val mapper: JokeDataModelMapper<JokeRealmModel>
+) : CacheDataSource {
 
-    override suspend fun getJoke(): Result<Joke, Unit> {
+    override suspend fun getJoke(): JokeDataModel {
         realmProvider.provide().use {
             val jokes = it.where(JokeRealmModel::class.java).findAll()
             if (jokes.isEmpty())
-                return Result.Error(Unit)
+                throw NoCachedJokesException()
             else
-                jokes.random().let { jokeRealm ->
-                    return Result.Success(
-                        Joke(
-                            jokeRealm.id,
-                            jokeRealm.type,
-                            jokeRealm.text,
-                            jokeRealm.punchLine
-                        )
-                    )
-                }
+                return jokes.random().map()
         }
     }
 
-    override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
-        return withContext(Dispatchers.IO) {
-            Realm.getDefaultInstance().use {
+    override suspend fun addOrRemove(id: Int, joke: JokeDataModel): JokeDataModel =
+        withContext(Dispatchers.IO) {
+            realmProvider.provide().use {
                 val jokeRealm = it.where(JokeRealmModel::class.java).equalTo("id", id).findFirst()
-                if (jokeRealm == null) {
-                    it.executeTransaction {
-                        val newJoke = joke.toJokeRealm()
-                        it.insert(newJoke)
+                return@withContext if (jokeRealm == null) {
+                    it.executeTransaction { transaction ->
+                        val newJoke = joke.map(mapper)
+                        transaction.insert(newJoke)
                     }
-                    joke.toFavoriteJoke()
+                    joke.changeCached(true)
                 } else {
                     it.executeTransaction {
                         jokeRealm.deleteFromRealm()
                     }
-                    joke.toBaseJoke()
+                    joke.changeCached(false)
                 }
             }
         }
-    }
 }

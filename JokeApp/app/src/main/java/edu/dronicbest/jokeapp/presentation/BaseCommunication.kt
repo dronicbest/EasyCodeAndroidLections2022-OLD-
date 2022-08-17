@@ -9,13 +9,17 @@ import androidx.lifecycle.Observer
  * @author dronicbest on 18.07.2022
  */
 class BaseCommunication : Communication {
-    private val liveData = MutableLiveData<BaseViewModel.State>()
+    private val liveData = MutableLiveData<State>()
 
-    override fun showState(state: BaseViewModel.State) {
+    override fun isState(type: Int): Boolean {
+        return liveData.value?.isType(type) ?: false
+    }
+
+    override fun showState(state: State) {
         liveData.value = state
     }
 
-    override fun observe(owner: LifecycleOwner, observer: Observer<BaseViewModel.State>) {
+    override fun observe(owner: LifecycleOwner, observer: Observer<State>) {
         liveData.observe(owner, observer)
     }
 }
