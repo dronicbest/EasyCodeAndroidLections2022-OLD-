@@ -1,6 +1,7 @@
 package edu.dronicbest.jokeapp.data.net
 
 import com.google.gson.annotations.SerializedName
+import edu.dronicbest.jokeapp.core.Mapper
 import edu.dronicbest.jokeapp.data.JokeDataModel
 import edu.dronicbest.jokeapp.domain.Joke
 
@@ -8,7 +9,7 @@ import edu.dronicbest.jokeapp.domain.Joke
  * JokeApp
  * @author dronicbest on 12.07.2022
  */
-data class JokeServerModel(
+data class JokeServerModel (
     @SerializedName("id")
     private val id: Int,
     @SerializedName("type")
@@ -19,9 +20,9 @@ data class JokeServerModel(
     private val setup: String,
     @SerializedName("category")
     private val punchline: String
-) {
+)  : Mapper<JokeDataModel> {
 
-    fun toJokeDataModel() = if (joke == null)
+    override fun to() = if (joke == null)
         JokeDataModel(id, type, setup, punchline)
     else
         JokeDataModel(id, type, joke, punchline)
