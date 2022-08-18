@@ -10,7 +10,7 @@
     <CheckBox
         android:id="@+id/checkBox"
         android:padding="@dimen/padding"
-        android:text="@string/show_favorite_joke"
+        tools:text="@string/show_favorite_joke"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -51,6 +51,6 @@
         android:layout_width="wrap_content"
         android:id="@+id/actionButton"
         android:layout_height="wrap_content"
-        android:text="@string/get_joke" />
+        tools:text="@string/get_joke" />
 
 </LinearLayout>

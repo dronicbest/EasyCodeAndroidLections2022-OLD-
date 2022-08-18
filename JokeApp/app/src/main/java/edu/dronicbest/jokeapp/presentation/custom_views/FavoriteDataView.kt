@@ -13,17 +13,26 @@ import edu.dronicbest.jokeapp.presentation.State
  * @author dronicbest on 18.08.2022
  */
 class FavoriteDataView : LinearLayout {
-    private val checkBox: CheckBox
-    private val textView: CorrectTextView
-    private val changeButton: CorrectImageButton
-    private val actionButton: CorrectButton
-    private val process: CorrectProgressBar
+    private lateinit var checkBox: CheckBox
+    private lateinit var textView: CorrectTextView
+    private lateinit var changeButton: CorrectImageButton
+    private lateinit var actionButton: CorrectButton
+    private lateinit var progress: CorrectProgressBar
 
     constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        init(attrs)
+    }
 
-    init {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        init(attrs)
+    }
+
+    private fun init(attrs: AttributeSet) {
         orientation = VERTICAL
         (context
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
@@ -32,8 +41,19 @@ class FavoriteDataView : LinearLayout {
         checkBox = findViewById(R.id.checkBox)
         textView = findViewById(R.id.textView)
         changeButton = findViewById(R.id.changeButton)
-        process = findViewById(R.id.progressBar)
+        progress = findViewById(R.id.progressBar)
         actionButton = findViewById(R.id.actionButton)
+
+        context.theme.obtainStyledAttributes(attrs, R.styleable.FavoriteDataView, 0, 0).apply {
+            try {
+                val actionButtonText = getString(R.styleable.FavoriteDataView_actionButtonText)
+                val checkBoxText = getString(R.styleable.FavoriteDataView_checkBoxText)
+                checkBox.text = checkBoxText
+                actionButton.text = actionButtonText
+            } finally {
+                recycle()
+            }
+        }
     }
 
     fun listenChanges(block: (checked: Boolean) -> Unit) =
@@ -49,5 +69,5 @@ class FavoriteDataView : LinearLayout {
         block.invoke()
     }
 
-    fun show(state: State) = state.show(process, actionButton, textView, changeButton)
+    fun show(state: State) = state.show(progress, actionButton, textView, changeButton)
 }
