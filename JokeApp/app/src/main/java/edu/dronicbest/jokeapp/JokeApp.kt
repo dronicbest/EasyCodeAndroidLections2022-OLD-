@@ -15,6 +15,8 @@ import edu.dronicbest.jokeapp.domain.BaseJokeInteractor
 import edu.dronicbest.jokeapp.domain.JokeFailureFactory
 import edu.dronicbest.jokeapp.presentation.*
 import io.realm.Realm
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,8 +28,13 @@ class JokeApp : Application() {
 
         Realm.init(this)
 
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://www.google.com")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
