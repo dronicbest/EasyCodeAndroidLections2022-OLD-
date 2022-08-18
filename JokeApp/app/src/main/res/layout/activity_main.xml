@@ -7,49 +7,9 @@
     android:orientation="vertical"
     tools:context=".presentation.MainActivity">
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:padding="@dimen/padding"
-        android:text="@string/show_favorite_joke"
+    <edu.dronicbest.jokeapp.presentation.custom_views.FavoriteDataView
+        android:id="@+id/favoriteDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <edu.dronicbest.jokeapp.presentation.custom_views.CorrectTextView
-            android:padding="@dimen/padding"
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="Joke or error message" />
-
-        <edu.dronicbest.jokeapp.presentation.custom_views.CorrectImageButton
-            android:background="?selectableItemBackground"
-            android:padding="@dimen/padding"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/changeButton"
-            tools:src="@android:drawable/ic_input_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <edu.dronicbest.jokeapp.presentation.custom_views.CorrectProgressBar
-        android:indeterminate="true"
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <edu.dronicbest.jokeapp.presentation.custom_views.CorrectButton
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:id="@+id/actionButton"
-        android:layout_height="wrap_content"
-        android:text="@string/get_joke" />
 
 </LinearLayout>

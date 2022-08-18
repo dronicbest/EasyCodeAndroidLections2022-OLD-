@@ -6,10 +6,7 @@ import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import edu.dronicbest.jokeapp.JokeApp
 import edu.dronicbest.jokeapp.R
-import edu.dronicbest.jokeapp.presentation.custom_views.CorrectButton
-import edu.dronicbest.jokeapp.presentation.custom_views.CorrectImageButton
-import edu.dronicbest.jokeapp.presentation.custom_views.CorrectProgressBar
-import edu.dronicbest.jokeapp.presentation.custom_views.CorrectTextView
+import edu.dronicbest.jokeapp.presentation.custom_views.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,33 +15,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val viewModel = (application as JokeApp).viewModel
-        val button = findViewById<CorrectButton>(R.id.actionButton)
-        val progressBar = findViewById<CorrectProgressBar>(R.id.progressBar)
-        val textView = findViewById<CorrectTextView>(R.id.textView)
-        val checkBox = findViewById<CheckBox>(R.id.checkBox)
-        val changeButton = findViewById<CorrectImageButton>(R.id.changeButton)
+        val favoriteDataView = findViewById<FavoriteDataView>(R.id.favoriteDataView)
 
-        progressBar.visibility = View.INVISIBLE
-
-        checkBox.setOnCheckedChangeListener { _, isChecked ->
+        favoriteDataView.listenChanges { isChecked ->
             viewModel.chooseFavorites(isChecked)
         }
 
-        changeButton.setOnClickListener {
+        favoriteDataView.handleChangeButton {
             viewModel.changeJokeStatus()
         }
 
-        button.setOnClickListener {
+        favoriteDataView.handleActionButton {
             viewModel.getJoke()
         }
 
         viewModel.observe(this) { state ->
-            state.show(
-                progressBar,
-                button,
-                textView,
-                changeButton
-            )
+            favoriteDataView.show(state)
         }
     }
 }
