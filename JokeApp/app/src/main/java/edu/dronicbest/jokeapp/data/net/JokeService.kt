@@ -1,5 +1,7 @@
 package edu.dronicbest.jokeapp.data.net
 
+import edu.dronicbest.jokeapp.core.Mapper
+import edu.dronicbest.jokeapp.data.JokeDataModel
 import retrofit2.Call
 import retrofit2.http.GET
 
@@ -7,10 +9,8 @@ import retrofit2.http.GET
  * JokeApp
  * @author dronicbest on 12.07.2022
  */
-interface JokeService {
-    @GET("https://v2.jokeapi.dev/joke/Any")
-    fun getJoke() : Call<JokeServerModel>
+interface JokeService<T : Mapper<JokeDataModel>> {
 
-    @GET("https://v2.jokeapi.dev/joke/Any")
-    fun getNewJoke() : Call<NewJokeServerModel>
+    fun getJoke() : Call<T>
+
 }

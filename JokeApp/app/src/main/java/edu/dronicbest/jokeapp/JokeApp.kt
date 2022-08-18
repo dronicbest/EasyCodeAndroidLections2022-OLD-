@@ -9,6 +9,8 @@ import edu.dronicbest.jokeapp.data.cache.BaseCachedJoke
 import edu.dronicbest.jokeapp.data.cache.BaseRealmProvider
 import edu.dronicbest.jokeapp.data.net.BaseCloudDataSource
 import edu.dronicbest.jokeapp.data.net.JokeService
+import edu.dronicbest.jokeapp.data.net.NewJokeCloudDataSource
+import edu.dronicbest.jokeapp.data.net.NewJokeService
 import edu.dronicbest.jokeapp.domain.BaseJokeInteractor
 import edu.dronicbest.jokeapp.domain.JokeFailureFactory
 import edu.dronicbest.jokeapp.presentation.*
@@ -31,7 +33,7 @@ class JokeApp : Application() {
 
         val cacheDataSource = BaseCacheDataSource(BaseRealmProvider(), JokeRealmMapper())
         val resourceManager = BaseResourceManager(this)
-        val cloudDataSource = BaseCloudDataSource(retrofit.create(JokeService::class.java))
+        val cloudDataSource = NewJokeCloudDataSource(retrofit.create(NewJokeService::class.java))
         val repository = BaseJokeRepository(cacheDataSource, cloudDataSource, BaseCachedJoke())
         val interactor = BaseJokeInteractor(repository, JokeFailureFactory(resourceManager), JokeSuccessMapper())
         viewModel = BaseViewModel(interactor, BaseCommunication())
