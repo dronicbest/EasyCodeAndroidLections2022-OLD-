@@ -1,7 +1,6 @@
 package edu.dronicbest.jokeapp.data.cache
 
 import edu.dronicbest.jokeapp.data.JokeDataModel
-import edu.dronicbest.jokeapp.presentation.JokeUiModel
 
 /**
  * JokeApp
@@ -10,7 +9,7 @@ import edu.dronicbest.jokeapp.presentation.JokeUiModel
 interface ChangeJoke {
     suspend fun change(changeJokeStatus: ChangeJokeStatus): JokeDataModel
 
-    class Empty() : ChangeJoke {
+    class Empty : ChangeJoke {
         override suspend fun change(changeJokeStatus: ChangeJokeStatus): JokeDataModel {
             throw IllegalStateException("Empty change joke called")
         }

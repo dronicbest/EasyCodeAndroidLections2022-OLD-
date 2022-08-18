@@ -2,7 +2,6 @@ package edu.dronicbest.jokeapp.domain.exceptions
 
 import edu.dronicbest.jokeapp.R
 import edu.dronicbest.jokeapp.ResourceManager
-import edu.dronicbest.jokeapp.domain.exceptions.JokeFailure
 
 /**
  * JokeApp

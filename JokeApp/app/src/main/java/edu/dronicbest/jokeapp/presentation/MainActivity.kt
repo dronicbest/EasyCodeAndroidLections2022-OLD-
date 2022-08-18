@@ -1,13 +1,15 @@
 package edu.dronicbest.jokeapp.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.CheckBox
+import androidx.appcompat.app.AppCompatActivity
 import edu.dronicbest.jokeapp.JokeApp
 import edu.dronicbest.jokeapp.R
-import edu.dronicbest.jokeapp.presentation.custom_views.*
+import edu.dronicbest.jokeapp.presentation.custom_views.CorrectButton
+import edu.dronicbest.jokeapp.presentation.custom_views.CorrectImageButton
+import edu.dronicbest.jokeapp.presentation.custom_views.CorrectProgressBar
+import edu.dronicbest.jokeapp.presentation.custom_views.CorrectTextView
 
 class MainActivity : AppCompatActivity() {
 

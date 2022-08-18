@@ -1,8 +1,6 @@
 package edu.dronicbest.jokeapp.data.cache
 
 import edu.dronicbest.jokeapp.data.JokeDataModel
-import edu.dronicbest.jokeapp.domain.Joke
-import edu.dronicbest.jokeapp.presentation.JokeUiModel
 
 /**
  * JokeApp

@@ -3,9 +3,6 @@ package edu.dronicbest.jokeapp.data
 import edu.dronicbest.jokeapp.core.JokeDataModelMapper
 import edu.dronicbest.jokeapp.data.cache.ChangeJoke
 import edu.dronicbest.jokeapp.data.cache.ChangeJokeStatus
-import edu.dronicbest.jokeapp.data.cache.JokeRealmModel
-import edu.dronicbest.jokeapp.domain.Joke
-import edu.dronicbest.jokeapp.presentation.custom_views.ShowText
 
 /**
  * JokeApp

@@ -3,7 +3,6 @@ package edu.dronicbest.jokeapp.data.net
 import com.google.gson.annotations.SerializedName
 import edu.dronicbest.jokeapp.core.Mapper
 import edu.dronicbest.jokeapp.data.JokeDataModel
-import edu.dronicbest.jokeapp.domain.Joke
 
 /**
  * JokeApp

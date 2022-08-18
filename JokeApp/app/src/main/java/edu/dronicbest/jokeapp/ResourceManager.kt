@@ -1,6 +1,5 @@
 package edu.dronicbest.jokeapp
 
-import android.content.Context
 import androidx.annotation.StringRes
 
 /**
