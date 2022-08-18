@@ -9,9 +9,16 @@
     tools:context=".presentation.MainActivity">
 
     <edu.dronicbest.jokeapp.presentation.custom_views.FavoriteDataView
-        android:id="@+id/favoriteDataView"
+        android:id="@+id/jokeFavoriteDataView"
         custom:actionButtonText="@string/get_joke"
         custom:checkBoxText="@string/show_favorite_joke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <edu.dronicbest.jokeapp.presentation.custom_views.FavoriteDataView
+        android:id="@+id/quoteFavoriteDataView"
+        custom:actionButtonText="@string/get_quote"
+        custom:checkBoxText="@string/show_favorite_quote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
